@@ -1,0 +1,13 @@
+dispatch :storage[blockid:out] to struct BlockOutput {
+  block?: struct BlockState {
+    id: #[id="block"] string,
+    states: mcdoc:block_states[[id]],
+  }
+}
+
+dispatch :storage[blockid:internal] to struct {
+  ids: [#[id="block"] string],
+  macro?: struct {
+    numeric_id?: int @ 0..,
+  }
+}
