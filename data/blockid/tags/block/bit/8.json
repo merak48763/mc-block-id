@@ -94,6 +94,7 @@
     "dragon_egg",
     "dragon_head",
     "dragon_wall_head",
+    "dried_ghast",
     "dried_kelp_block",
     "dripstone_block",
     "dropper",
@@ -255,7 +256,7 @@
     "light_gray_carpet",
     "light_gray_concrete",
     "light_gray_concrete_powder",
-    "light_gray_glazed_terracotta",
+    "potted_torchflower",
     "potted_warped_fungus",
     "potted_warped_roots",
     "potted_white_tulip",
@@ -510,7 +511,6 @@
     "water_cauldron",
     "waxed_chiseled_copper",
     "waxed_copper_block",
-    "waxed_copper_bulb",
-    "waxed_copper_door"
+    "waxed_copper_bulb"
   ]
 }

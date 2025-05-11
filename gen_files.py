@@ -1,6 +1,6 @@
 import json, math, hashlib, os
 
-VERSION_NAME = "1.21.5"
+VERSION_NAME = "25w19a"
 block_list: list[str] = []
 # prop type hash id -> (blockstate key, blockstate value list)
 blockstate_types: dict[int, tuple[str, list[str]]] = {}

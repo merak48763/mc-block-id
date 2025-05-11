@@ -57,6 +57,7 @@ execute if block ~ ~ ~ #blockid:state_type/e037f4af run return run function bloc
 execute if block ~ ~ ~ #blockid:state_type/ee13d100 run return run function blockid:_/blockstate_properties/ee13d100
 execute if block ~ ~ ~ #blockid:state_type/74e36891 run return run function blockid:_/blockstate_properties/74e36891
 execute if block ~ ~ ~ #blockid:state_type/2ee4cc79 run return run function blockid:_/blockstate_properties/2ee4cc79
+execute if block ~ ~ ~ #blockid:state_type/5f896efd run return run function blockid:_/blockstate_properties/5f896efd
 execute if block ~ ~ ~ #blockid:state_type/f385c363 run return run function blockid:_/blockstate_properties/f385c363
 execute if block ~ ~ ~ #blockid:state_type/fc7f7d5b run return run function blockid:_/blockstate_properties/fc7f7d5b
 execute if block ~ ~ ~ #blockid:state_type/6193cc3a run return run function blockid:_/blockstate_properties/6193cc3a

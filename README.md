@@ -1,6 +1,6 @@
 # Blockstate Getter
 
-Target game version: 1.21.5
+Target game version: 25w19a
 
 ## Functions
 
