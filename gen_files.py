@@ -1,4 +1,4 @@
-import json, math
+import json, math, hashlib, os
 
 VERSION_NAME = "1.21.5"
 block_list: list[str] = []
@@ -11,11 +11,11 @@ blockstate_properties: dict[str, int] = {}
 tag_count = 0
 
 def prop_type_id_of(prop_key: str, prop_values: list[str]):
-  return hash(f"{prop_key}:{'|'.join(sorted(prop_values))}")
+  return int.from_bytes(hashlib.md5(f"{prop_key}:{'|'.join(sorted(prop_values))}".encode(), usedforsecurity=False).digest(), "big")
 def prop_pool_id_of(prop_ids: list[int]):
-  return hash(",".join(str(n) for n in sorted(prop_ids)))
+  return int.from_bytes(hashlib.md5(",".join(str(n) for n in sorted(prop_ids)).encode(), usedforsecurity=False).digest(), "big")
 def hexstr(n: int):
-  return ("00000000%x" % (n & 0xffffffff))[-8:]
+  return f"{n & 0xffffffff :08x}"
 
 def load_data():
   global block_list, tag_count
@@ -39,6 +39,7 @@ def load_data():
   print(f"Target version: {VERSION_NAME}")
   print(f"Block count: {len(block_list)}")
   print(f"Block state type count: {len(blockstate_types)}")
+  print(f"Block state combination count: {len(blockstate_pools)}")
 
 def generate_load_id_function():
   with open("data/blockid/function/_/load_block_id.mcfunction", "w") as file:
@@ -63,6 +64,7 @@ def generate_blockstate_type_tags():
   for prop_pool_id, blocks in type_tags.items():
     with open(f"data/blockid/tags/block/state_type/{hexstr(prop_pool_id)}.json", "w") as file:
       json.dump({"values": blocks}, file, indent=2)
+      file.write("\n")
 
 def generate_numeric_id_function():
   with open("data/blockid/function/_/get_numeric_id.mcfunction", "w") as file:
@@ -72,9 +74,38 @@ def generate_numeric_id_function():
       file.write(f"execute if block ~ ~ ~ #blockid:bit/{bit_id} run scoreboard players add #numeric_id blockid.var {2**bit_id}\n")
     file.write("return run scoreboard players get #numeric_id blockid.var\n")
 
+def generate_blockstate_function():
+  with open("data/blockid/function/_/get_blockstate_properties.mcfunction", "w") as file:
+    file.write("# generated function\n")
+    file.write(f"execute if block ~ ~ ~ #blockid:state_type/{hexstr(prop_pool_id_of([]))} run return 1\n")
+    for prop_pool_id in blockstate_pools:
+      if prop_pool_id == prop_pool_id_of([]):
+        continue
+      file.write(f"execute if block ~ ~ ~ #blockid:state_type/{hexstr(prop_pool_id)} run return run function blockid:_/blockstate_properties/{hexstr(prop_pool_id)}\n")
+  for prop_pool_id, prop_type_ids in blockstate_pools.items():
+    if prop_pool_id == prop_pool_id_of([]):
+      continue
+    with open(f"data/blockid/function/_/blockstate_properties/{hexstr(prop_pool_id)}.mcfunction", "w") as file:
+      file.write("# generated function\n")
+      for prop_type_id in prop_type_ids:
+        prop_key = blockstate_types[prop_type_id][0]
+        file.write(f"function blockid:_/blockstate_properties/{hexstr(prop_pool_id)}/{prop_key}\n")
+    try:
+      os.mkdir(f"data/blockid/function/_/blockstate_properties/{hexstr(prop_pool_id)}")
+    except(FileExistsError):
+      pass
+    for prop_type_id in prop_type_ids:
+      prop_key, prop_values = blockstate_types[prop_type_id]
+      with open(f"data/blockid/function/_/blockstate_properties/{hexstr(prop_pool_id)}/{prop_key}.mcfunction", "w") as file:
+        file.write("# generated function\n")
+        for prop_value in prop_values[:-1]:
+          file.write(f'execute if block ~ ~ ~ #blockid:state_type/{hexstr(prop_pool_id)}[{prop_key}={prop_value}] run return run data modify storage blockid:out block.states merge value {{{prop_key}: "{prop_value}"}}\n')
+        file.write(f'data modify storage blockid:out block.states merge value {{{prop_key}: "{prop_values[-1]}"}}\n')
+
 load_data()
 
 generate_load_id_function()
 generate_block_bit_tags()
 generate_numeric_id_function()
 generate_blockstate_type_tags()
+generate_blockstate_function()

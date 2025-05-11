@@ -1,0 +1,11 @@
+{
+  "values": [
+    "creeper_wall_head",
+    "dragon_wall_head",
+    "piglin_wall_head",
+    "player_wall_head",
+    "skeleton_wall_skull",
+    "wither_skeleton_wall_skull",
+    "zombie_wall_head"
+  ]
+}

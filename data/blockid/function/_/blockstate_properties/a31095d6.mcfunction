@@ -1,0 +1,8 @@
+# generated function
+function blockid:_/blockstate_properties/a31095d6/facing
+function blockid:_/blockstate_properties/a31095d6/slot_0_occupied
+function blockid:_/blockstate_properties/a31095d6/slot_1_occupied
+function blockid:_/blockstate_properties/a31095d6/slot_2_occupied
+function blockid:_/blockstate_properties/a31095d6/slot_3_occupied
+function blockid:_/blockstate_properties/a31095d6/slot_4_occupied
+function blockid:_/blockstate_properties/a31095d6/slot_5_occupied
